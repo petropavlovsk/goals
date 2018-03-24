@@ -1,0 +1,51 @@
+<!--the template uses jinja (http://jinja.pocoo.org/) to read layout from a template and pass in information from the datebase through python-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Change Goals
+{% endblock %}
+
+{% block main %}
+
+    <h3>Befintliga mål för din avdelning</h3>
+        <form action={{ url_for('change_goals') }} method="post">
+            <input type="text" class="col-sm-7" value="Mål"/>  <input type="text" class="col-sm-4" value="Målnivå"/><input type="text" class="col-sm-1" value="Ta bort"/> <br><br> <!--  -->
+        {% for row in goals %} <!-- iterates through the goals connected to the logged in user. the user can change goal or KPI connected to the goal. the logged in user can also delete the goal by checking a checkbox.-->
+            <input name="{{row.goal_name}}" class="col-sm-7" type="text" value="{{row.goal_name}}"/>   <input class="col-sm-4" name="{{row.goal_id}}" type="text" value="{{row.goal_level}}"/> <input class="col-sm-1" name="DELETE_{{row.goal_id}}" type="checkbox"  value="YES"/> <input type="hidden" name="DELETE_{{row.goal_id}}" value="no"><br> <!-- dymaniskt från varje iteration i loopen, skriv registrants.name from registrants.dorm -->
+        {% endfor %}
+        <br><br><br>
+        <div class="form-group">
+            <button class="btn btn-default" name="action" value="change" type="submit">Ändra mål</button>
+            <button class="btn btn-default" name="action" value="delete" onclick="return confirm('Vill du verkligen radera dessa mål?');" type="submit">Ta bort markerat</button>
+        </div>
+    </form>
+
+
+
+<h3>Lägg till mål</h3>
+
+<form action="{{ url_for('change_goals') }}" data-toggle="validator" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label for="goal_name" class="control-label">Mål</label>
+                <input autocomplete="off" autofocus class="form-control" name="goal_name" required type="text"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <label for="goal_level" class="control-label">Målnivå</label>
+                <input autocomplete="off" autofocus class="form-control" name="goal_level" type="text"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" name="action" value="add" type="submit">Lägg till mål</button>
+            </div>
+        </fieldset>
+    </form>
+
+
+
+
+
+
+{% endblock %}

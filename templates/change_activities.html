@@ -1,0 +1,59 @@
+<!--the template uses jinja (http://jinja.pocoo.org/) to read layout from a template and pass in information from the datebase through python-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Change Activities
+{% endblock %}
+
+{% block main %}
+
+    <h3>Befintliga aktiviteter för din avdelning</h3>
+    <h5>Skriv över aktivitet eller sista dag för att ändra.</h5>
+        <form action={{ url_for('change_activities') }} method="post">
+            <input type="text" class="col-sm-5" value="Aktivitet"/>  <input type="text" class="col-sm-2" value="Sista dag"/><input type="text" class="col-sm-4" value="Mål"/> <input type="text" class="col-sm-1" value="Ta bort"/> <br><br>
+        {% for row in activities %} <!--  itterates through every activity connected to the department of the logged in user. makes it posible to change activity name or date or eaven to remove the activity -->
+            <input name="{{row.activity_name}}" class="{{row.late}} col-sm-5" type="text" value="{{row.activity_name}}"/>  <input name="{{row.date.date()}}" class="{{row.late}} col-sm-2" type="text" value="{{row.date.date()}}"/>  <input name="{{row.goal_name}}" class="{{row.late}} col-sm-4"  type="text" value="{{row.goal_name}}"/> <input name="DELETE_{{row.activity_id}}" class="{{row.late}} col-sm-1"  type="checkbox"  value="YES"/> <input type="hidden" name="DELETE_{{row.activity_id}}" value="no"><br> <!-- dymaniskt från varje iteration i loopen, skriv registrants.name from registrants.dorm -->
+        {% endfor %}
+        <br> <br> <br>
+        <div class="form-group">
+            <button class="btn btn-default" name="action" value="change" type="submit">Ändra aktivitet eller datum</button>
+            <button class="btn btn-default" name="action" value="delete" onclick="return confirm('Vill du verkligen radera dessa aktiviteter?');" type="submit">Ta bort markerat</button>
+        </div>
+    </form>
+
+
+<h3>Lägg till aktivitet</h3>
+
+<form action="{{ url_for('change_activities') }}" data-toggle="validator" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label for="activity_name" class="control-label">Aktivitet</label>
+                <input autocomplete="off" autofocus class="form-control" name="activity_name" required type="text"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+            <label for="goal_name" class="control-label">Mål:</label>
+            <select name="goal_name">
+            {% for row in goals %} <!-- for every row in the goals table -->
+            <option value="{{ row.goal_name }}">{{ row.goal_name }}</option>
+            {% endfor %}
+            </select>
+            </div>
+            <div class="form-group">
+                <label for="date" class="control-label">Planerat avslut:</label>
+                <input autocomplete="off" autofocus class="form-control" name="date" required type="date"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" name="action" value="add"  type="submit">Lägg till aktivitet</button>
+            </div>
+        </fieldset>
+    </form>
+
+
+
+
+
+
+{% endblock %}

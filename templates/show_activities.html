@@ -1,0 +1,25 @@
+<!--the template uses jinja (http://jinja.pocoo.org/) to read layout from a template and pass in information from the datebase through python-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+
+{% block head %}
+
+<!-- here i can write future javescript-->
+
+{% endblock %}
+
+
+
+{% block main %}
+    <h3>Aktiviteter för {{user.name}}</h3>
+    <form action={{ url_for('show_activities') }} method="get">
+        {% for row in activities %} <!-- iterates through the activities and the corresponding report-status connected to the emplogee the boss has clicked on-->
+            <input type="text" class="{{row.late}} col-sm-6" value="{{row.activity_name}}"> <input type="test" class="{{row.late}} col-sm-4" value="{{row.date.date()}}"> <input name="{{row.activity_id}}" type="checkbox"  {{row.done}} /><br>
+        {% endfor %}
+    </form>
+{% endblock %}

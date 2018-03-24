@@ -1,0 +1,96 @@
+<!--the template uses jinja (http://jinja.pocoo.org/) to read layout from a template and pass in information from the datebase through python-->
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta -->
+        <meta charset="utf-8"/>
+        <meta content="initial-scale=1, width=device-width" name="viewport"/>
+
+        <!-- documentation at http://getbootstrap.com/, alternative themes at https://www.bootstrapcdn.com/bootswatch/ -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+
+        <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"/>
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <script src="https://code.jquery.com/jquery-latest.min.js"></script>                                    <!--jquery-->
+
+
+        <!-- http://1000hz.github.io/bootstrap-validator/ -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.5/validator.min.js"></script> <!--snyggt bibliotek för felanmälan-->
+
+        {% block head %}{% endblock %}
+
+        <title>Mal- och aktivitetsuppfoljning</title>
+
+    </head>
+
+    <body>
+
+        <div class="container">
+
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" id="logga" href="{{ url_for('index') }}">GOALS</span></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar">
+                        {% if session.user_id %}
+                            <ul class="nav navbar-nav">
+                                <li><a href="{{ url_for('report_activities') }}">Aktiviteter</a></li>
+                                <!--
+                                <li><a href="{{ url_for('report_goals') }}">Resultat</a></li>
+                                <li><a href="{{ url_for('statistics') }}">Statistik</a></li>
+                                -->
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                {{ active_user  }} - Tertial: {{ active_tertial.tertial_name  }}  <!--shows the name of the logged in user and the active tertial-->
+                                <li><a href="{{ url_for('change_goals') }}">Ändra mål</a></li>
+                                <li><a href="{{ url_for('change_activities') }}">Ändra Aktiviteter</a></li>
+                                <li><a href="{{ url_for('passChange') }}">Ändra lösenord</a></li>
+                                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                            </ul>
+                        {% else %}
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="{{ url_for('register') }}">Register</a></li>
+                                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                            </ul>
+                        {% endif %}
+                        {% if session.adm %}
+                             <ul class="nav navbar-nav navbar-right">
+                                <li><a href="{{ url_for('add_user') }}">Admin</a></li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+
+            {% if get_flashed_messages() %}
+                <header>
+                    <div class="alert alert-info" role="alert">
+                        {{ get_flashed_messages() | join(" ") }}
+                    </div>
+                </header>
+            {% endif %}
+
+            <main>
+                {% block main %}{% endblock %}
+            </main>
+
+        </div>
+
+    </body>
+
+</html>

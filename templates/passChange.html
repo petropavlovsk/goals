@@ -1,0 +1,33 @@
+<!--the template uses jinja (http://jinja.pocoo.org/) to read layout from a template and pass in information from the datebase through python-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    PasswordChange
+{% endblock %}
+
+{% block main %}
+    <form action="{{ url_for('passChange') }}" data-toggle="validator" method="post">
+        <fieldset>
+
+            <div class="form-group">
+                <label for="new_password" class="control-label">Nytt lösenord</label>
+                <input class="form-control" data-minlength="8" data-minlength-error="Minst 8 tecken" name="new_password" id="new_password" required type="password"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <label for="new_password2" class="control-label">Upprepa nytt lösenord</label> <!--data-match requires that the input matches that of passwords-->
+                <input class="form-control" data-match="#new_password" data-match-error="Lösenorden matchar inte" name="new_password2" id="new_password2" required type="password"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <label for="old_password" class="control-label">Gammalt lösenord</label>
+                <input class="form-control" name="old_password" id="old_password" required type="password"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" type="submit">Byt lösenord</button>
+            </div>
+        </fieldset>
+    </form>
+{% endblock %}

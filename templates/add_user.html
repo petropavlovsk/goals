@@ -1,0 +1,80 @@
+<!--the template uses jinja (http://jinja.pocoo.org/) to read layout from a template and pass in information from the datebase through python-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Add_User
+{% endblock %}
+
+{% block main %}
+
+    <h3>Lägg till användare</h3>
+
+    <form action="{{ url_for('add_user') }}" data-toggle="validator" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label for="name" class="control-label">Namn</label>
+                <input autocomplete="off" autofocus class="form-control" name="name" required type="text"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+            <label for="boss" class="control-label">Närmsta chef:</label>
+            <select name="boss">
+            {% for row in boss %} <!--fills the dropdown list from the boss database-->
+            <option value="{{ row.boss_name }}">{{ row.boss_name }}</option>
+            {% endfor %}
+            </select>
+            </div>
+            <div class="form-group">
+            <label for="dep" class="control-label">Avdelning:</label>
+            <select name="dep">
+            {% for department in deps %} <!--fills the dropdown list from the dep database-->
+            <option value="{{ department.dep_name }}">{{ department.dep_name }}</option>
+            {% endfor %}
+            </select>
+            </div>
+            <div class="form-group">
+                <label for="adm" class="control-label">Administratör</label><br>
+                <input class="form-control" name="adm" value="Yes" type="checkbox"/>
+            </div>
+            <input type="hidden" name="adm" value=None>
+            <div class="form-group">
+                <label for="email" class="control-label">Epost</label>
+                <input class="form-control" id="email" name="email" required type="text"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="control-label">Lösenord</label>
+                <input class="form-control" data-minlength="8" data-minlength-error="Minst 8 tecken" id="password" name="password" required type="password"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <label for="confirmation" class="control-label">Upprepa lösenord</label>
+                <input class="form-control" data-match="#password" data-match-error="Lösenorden matchar inte" id="confirmation" required type="password"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" name="action" value="add" type="submit">Lägg till användare</button>
+            </div>
+        </fieldset>
+    </form>
+
+
+    <h3>Ändra tertial</h3>
+    <h5>Markera bara en ruta</h5>
+        <form action={{ url_for('add_user') }} method="post">
+        {% for row in tertial %} <!-- iterates through every row in the tertial database-->
+            Tertial: <input value="{{row.tertial_name}}" type="text"/>  * <input name="{{row.tertial_name}}" title="markera inte flera rutor än en" type="checkbox" {{row.active_tertial}} value="checked"/> <input type="hidden" name="{{row.tertial_name}}" value=NULL><br> <!--  -->
+        {% endfor %}
+        <br>
+        <div class="form-group">
+            <button class="btn btn-default" name="action" title="Klicka här för att ändra tertial. Du får inte markera fler än en ruta!" value="set" type="submit">Ändra tertial</button>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-default" name="action" title="Klicka här för att nollställa rapporteringen och göra alla knappar röda igen!" value="reset" onclick="return confirm('Är du säker på att du vill nollställa rapporterat tertial?');" type="submit">Nollställ rapporterat</button>
+        </div>
+    </form>
+
+
+
+{% endblock %}

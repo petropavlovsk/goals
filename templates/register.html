@@ -1,0 +1,98 @@
+<!--the template uses jinja (http://jinja.pocoo.org/) to read layout from a template and pass in information from the datebase through python-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+
+    <!-- form control using bootstrap and jQuery-->
+    <form action="{{ url_for('register') }}" data-toggle="validator" method="post">
+        <fieldset>
+            <div class="form-group">
+                <label for="name" class="control-label">Namn</label>
+                <input autocomplete="off" autofocus class="form-control" name="name" required type="text"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+            <label for="boss" class="control-label">Närmsta chef:</label>
+            <select name="boss">
+            {% for row in boss %}
+            <option value="{{ row.boss_name }}">{{ row.boss_name }}</option> <!--the dropdown list is filled from the boss database-->
+            {% endfor %}
+            </select>
+            </div>
+            <div class="form-group">
+            <label for="dep" class="control-label">Avdelning:</label>
+            <select name="dep">
+            {% for department in deps %}
+            <option value="{{ department.dep_name }}">{{ department.dep_name }}</option> <!-- the dropdown-list is filled from the dep database-->
+            {% endfor %}
+            </select>
+            </div>
+            <div class="form-group">
+                <label for="email" class="control-label">Epost</label>
+                <input class="form-control" id="email" name="email" required type="text"/>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="control-label">Lösenord</label>
+                <input class="form-control" data-minlength="8" data-minlength-error="Minst 8 tecken" id="password" name="password" required type="password"/> <!--data-minlength="8" demands that the input is at least 8 characters long.-->
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <label for="confirmation" class="control-label">Upprepa lösenord</label>
+                <input class="form-control" data-match="#password" data-match-error="Lösenorden matchar inte" id="confirmation" required type="password"/> <!--data-match requires that the input matches the password-input-->
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" type="submit">Register</button>
+            </div>
+        </fieldset>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+
+<!-- RULLIST!!!
+
+<form action="{{ url_for('register') }}" method="post"> <!--ge mig vägen för registrering, i detta fall är det bara /register för det skrev vi i applikation.py. fördelen med det är att slippa hårdkoda sådant som kan ändras-->
+<!--    Name: <input name="name" type="text"/>
+    <br/>
+    Dorm
+    <select name="dorm">
+        <option value="Apley Court">Apley Court</option>
+        <option value="Canaday">Canaday</option>
+        <option value="Grays">Grays</option>
+        <option value="Graygouse">Graygouse</option>
+    </select>
+<input type="submit" value="submit"/>
+</form>
+
+-->

@@ -1,0 +1,49 @@
+.container
+{
+    /* center contents */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+/* colors for navbar */
+.navbar-brand
+{
+    color: #333123; /*HSB mjuksvart*/
+    font-weight: 600;
+    background-color: #fed100; /*hsb-gul*/
+}
+
+.navbar {
+    background-color: #fed100; /*hsb-gul*/
+    font-weight: 500;
+}
+
+#logga
+{
+    color: #153784; /*hsb-blå*/
+    font-weight: 800;
+    background-color: #fed100; /*hsb-gul*/
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+main td
+{
+    /* left-align tables' cells */
+    text-align: left;
+}

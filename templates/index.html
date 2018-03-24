@@ -1,0 +1,44 @@
+<!--the template uses jinja (http://jinja.pocoo.org/) to read layout from a template and pass in information from the datebase through python-->
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+
+{% block head %}
+
+{% endblock %}
+
+
+
+{% block main %}
+
+    <h3>Status för rapportering</h3>
+
+        <form action={{ url_for('index') }} method="post"><!--readonly form-control-plaintext är ett försök att ta bort ramen-->
+            <input type="text" readonly class="col-sm-10 form-control-plaintext" value="Resultatansvarig"/>  <input type="text" class="col-sm-1" value="Skickad"/><input type="text" class="col-sm-1" value="Godkänd"/> <br><br> <!--  -->
+        {% for row in users %} <!-- loops through every user and shows if they have reported therir activities and if their boss has ok the report  -->
+            <input type="text" readonly class="form-control-plaintext col-sm-10" value="{{row.name}}" />  <button type="button" class="btn {{row.reported}} disabled" role="button">    </button>         <button type="button" class="btn {{row.okeyed2}} disabled" onclick="return confirm('Är du reda att skicka in resultatet för detta tertial?');" role="button">    </button>  <br><br> <!--  -->
+        {% endfor %}
+         </form>
+
+    <hr>
+    <h3>Återstående aktiviteter {{now}}</h3>
+        <form action={{ url_for('index') }} method="post">
+            <input type="text" class="col-sm-6" value="Aktivitet"/>  <input type="text" class="col-sm-3" value="Avdelning"/><input type="text" class="col-sm-3" value="Sista dag"/> <br><br> <!-- -->
+        {% for row in toDo %} <!-- lists every remaning activity for all users. late activities is colored red with boot-strap  -->
+            <input type="text" class="{{row.late}} col-sm-6" value="{{row.activity_name}}"/> <input class="{{row.late}} col-sm-3" type="text" value="{{row.dep_name}}"/> <input class="{{row.late}} col-sm-3" type="text" value="{{row.date.date()}}"/> <br><br> <!--  -->
+        {% endfor %}
+         </form>
+    <hr>
+    <h3>Utförda aktiviteter</h3>
+        <form action={{ url_for('index') }} method="post">
+            <input type="text" class="col-sm-6" value="Aktivitet"/>  <input type="text" class="col-sm-3" value="Avdelning"/><input type="text" class="col-sm-3" value="Sista dag"/> <br><br> <!--  -->
+        {% for row in done %} <!-- lists every completed activity for all users -->
+            <input type="text" class="col-sm-6" value="{{row.activity_name}}"/> <input class="col-sm-3" type="text" value="{{row.dep_name}}"/> <input class="col-sm-3" type="text" value="{{row.date.date()}}"/> <br><br> <!-- -->
+        {% endfor %}
+         </form>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Aktiviteter
+{% endblock %}
+
+{% block main %}
+    <h3>Befintliga aktiviteter för din avdelning</h3>
+    <h5>Klarmarkera de aktiviteter som är färdiga. Spara resultatet. Skicka in när du är färdig med rapporteringen.</h5>
+        <form action={{ url_for('report_activities') }} method="post">
+            <input type="text" class="col-sm-5" value="Aktivitet"/>  <input type="text" class="col-sm-2" value="Sista dag"/><input type="text" class="col-sm-4" value="Mål"/> <input type="text" class="col-sm-1" value="Klar"/> <br><br> <!--  -->
+        {% for row in activities %} <!-- shows every activity connected to the logged in users department. the date, the connected goal and whether the activity is marked as done is also shown. the user can mark the activity as done and send in the report-->
+            <input type="text" class="{{row.late}} col-sm-5"  value="{{row.activity_name}}"/> <input class="{{row.late}} col-sm-2" type="text" value="{{row.date.date()}}"/>  <input class="{{row.late}} col-sm-4" type="text" value="{{row.goal_name}}"/> <input name="{{row.activity_id}}" class="col-sm-1" type="checkbox"  {{row.done}} value="checked"/> <input type="hidden" name="{{row.activity_id}}" value="No">  <br> <!-- -->
+        {% endfor %}
+        <br> <br> <br>
+        <div class="form-group">
+            <button class="btn btn-default" name="action" title="Klicka här för att spara ditt resultat." value="save" type="submit">Spara resultat</button> <!-- saves the done status from the checkbox-->
+            <button class="btn btn-default" name="action" title="Klicka här för att skicka in din tertialrapport för godkännande!" value="send" onclick="return confirm('Är du reda att skicka in resultatet för detta tertial?');" type="submit">Skicka in resultat</button>
+            <br><br>Tertialet rapporterat: <button type="button" class="btn {{reported}} disabled" role="button">    </button> <!--sends in the report for the period-->
+        </div>
+    <hr>
+    <h3>Dina chefer</h3> <!--of the logged in user is a boss for other bosses, he or she can here se the reported-status for the bosses under him or her.-->
+        <h5>Klicka på den röda/gröna rutan för att se aktiviteter och godkänna rapporteringen.</h5>
+            <input type="text" class="col-sm-7" value="Ansvarig chef under dig"/>  <input type="text" class="col-sm-3" value="Avdelning"/><input type="text" class="col-sm-1" value="Godkänd"/> <input type="text" class="col-sm-1" value="Skickad"/> <br><br> <!--  -->
+        {% for row in emps %} <!-- loops through every boss under the logged in user. if the colored button is clicked that users activities is shown -->
+            <input type="text" class="col-sm-7" value="{{row.name}}"/> <input class="col-sm-3" type="text" value="{{row.dep}}"/>  <button class="btn {{row.reported}}" title="Klicka på knappen för att se rapporterade aktiviteter! Knappen är grön om medarbetaren skickat in sin rapport. Godkänn inte rapporter som inte är inskickade!" name="action" value="{{row.id}}" type="submit">    </button>   <input name="OK_{{row.id}}" class="col-sm-1" title="Kryssa i rutan och klicka på Godkänn för att godkänna rapporten!" type="checkbox" {{row.okeyed}} value="checked"/> <input type="hidden" name="OK_{{row.id}}" value="No">  <br><br> <!--  -->
+        {% endfor %}
+        <br>
+
+        <div class="form-group">
+            <button class="btn btn-default" name="action" value="save2" type="submit">Godkänn</button>
+        </div>
+    </form>
+{% endblock %}
